@@ -1,0 +1,5 @@
+Source: ImageNet dataset
+
+Ref: Deng, Jia, et al. "ImageNet: A large-scale hierarchical image database." CVPR, 2009.
+
+Link: http://www.image-net.org/

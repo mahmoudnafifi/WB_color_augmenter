@@ -1,0 +1,5 @@
+Source: ADE20K dataset
+
+Ref: Zhou, Bolei, et al. "Scene parsing through ADE20K dataset." CVPR, 2017.
+
+Link: https://groups.csail.mit.edu/vision/datasets/ADE20K/
