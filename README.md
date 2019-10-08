@@ -2,7 +2,6 @@
 
 ## What Else Can Fool Deep Learning? Addressing Color Constancy Errors on Deep Neural Network Performance
 
-
 *[Mahmoud Afifi](https://sites.google.com/view/mafifi)*<sup>1</sup> and *[Michael S. Brown](http://www.cse.yorku.ca/~mbrown/)*<sup>1,2</sup>
 <br></br><sup>1</sup>York University  <sup>2</sup>Samsung Research
 
