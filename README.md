@@ -15,7 +15,7 @@ Our augmentation method can accurately emulate realistic color constancy degrada
 ### [Project page](http://cvil.eecs.yorku.ca/projects/public_html/wb_emulation/index.html)
 
 ### Publication
-Mahmoud Afifi and Michael S. Brown, What Else Can Fool Deep Learning? Addressing Color Constancy Errors on Deep Neural Network Performance, International Conference on Computer Vision (ICCV), 2019.
+Mahmoud Afifi and Michael S. Brown. What Else Can Fool Deep Learning? Addressing Color Constancy Errors on Deep Neural Network Performance. International Conference on Computer Vision (ICCV), 2019.
 
 
 
