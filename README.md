@@ -5,6 +5,8 @@
 *[Mahmoud Afifi](https://sites.google.com/view/mafifi)*<sup>1</sup> and *[Michael S. Brown](http://www.cse.yorku.ca/~mbrown/)*<sup>1,2</sup>
 <br></br><sup>1</sup>York University  <sup>2</sup>Samsung Research
 
+#### [Project page](http://cvil.eecs.yorku.ca/projects/public_html/wb_emulation/index.html)
+
 <br>
 <img src="https://drive.google.com/uc?export=view&id=1hFq00SmUo4-xUZFJQAqMRQNkwO6NIu6w" style="width: 350px; max-width: 100%; height: auto" title="Click for the larger version." />
 
@@ -15,15 +17,13 @@ Our augmentation method can accurately emulate realistic color constancy degrada
 
 ### Quick start
 #### 1. Matlab:
-i. Run `install_.m`. 
-ii. Try our demos: 
- * `demo_single_image' to process signle image
- * `demo_batch' to process an image directory
- * `demo_WB_color_augmentation' to process an image directory (for color augmentation) and generating corresponding ground truth files for the generated images
- * `demo_GUI' (located in `GUI' directory) for a GUI interface 
- 
+ 1. Run `install_.m`
+ 2. Try our demos: 
+  * `demo_single_image` to process signle image
+  * `demo_batch` to process an image directory
+  * `demo_WB_color_augmentation` to process an image directory (for color augmentation) and generating corresponding ground truth files for the generated images
+  * `demo_GUI` (located in `GUI` directory) for a GUI interface 
 
-### [Project page](http://cvil.eecs.yorku.ca/projects/public_html/wb_emulation/index.html)
 
 #### MIT License
 
