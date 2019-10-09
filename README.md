@@ -23,6 +23,26 @@ Our augmentation method can accurately emulate realistic color constancy degrada
     * `demo_batch` to process an image directory
     * `demo_WB_color_augmentation` to process an image directory and repeating the corresponding ground truth files for our generated images
     * `demo_GUI` (located in `GUI` directory) for a GUI interface 
+3. To use our emulator inside your code, please follow the following steps:
+   * Either run install_() or addpath to our directories:
+   ```
+    addpath('src');
+    addpath('models'); 
+    %or use install_()
+   ```
+
+* Load our model:
+   ```
+   load('synthWBmodel.mat'); %load WB_emulator CPU model --  use load('synthWBmodel_GPU.mat');  to load WB_emulator GPU model
+   ``` 
+* Run the WB emulator:
+   ```
+   out = WB_emulator.generate_wb_srgb(I, NumOfImgs); %I: input image tensor & NumOfImgs (optional): numbre of images to generate [<=10]
+   ```
+* Use the generated images:
+   ```
+   new_img = out(:,:,:,i); %access the ith generated image
+   ```
 
 #### MIT License
 
