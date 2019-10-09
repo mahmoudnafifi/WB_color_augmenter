@@ -19,11 +19,10 @@ Our augmentation method can accurately emulate realistic color constancy degrada
 #### 1. Matlab:
  1. Run `install_.m`
  2. Try our demos: 
-  * `demo_single_image` to process signle image
-  * `demo_batch` to process an image directory
-  * `demo_WB_color_augmentation` to process an image directory (for color augmentation) and generating corresponding ground truth files for the generated images
-  * `demo_GUI` (located in `GUI` directory) for a GUI interface 
-
+    * `demo_single_image` to process signle image
+    * `demo_batch` to process an image directory
+    * `demo_WB_color_augmentation` to process an image directory and repeating the corresponding ground truth files for our generated images
+    * `demo_GUI` (located in `GUI` directory) for a GUI interface 
 
 #### MIT License
 
