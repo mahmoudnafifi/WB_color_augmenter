@@ -38,6 +38,11 @@ imagename = fullfile('..','images','image1.jpg'); %image filename
 output_dir = fullfile('..','results'); %output directory to save the 
 % generated images and a copy of input image
 useGPU = false; %to use GPU
+NumOfImgs = 10; %should be less than or equal 10
+
+if NumOfImgs > 10
+    error('Cannot generate more than 10 images for each input image');
+end
 
 if exist(output_dir,'dir') == 0
     mkdir(output_dir);
@@ -58,7 +63,7 @@ imwrite(I_in,fullfile(output_dir,sprintf('%s%s%s',name,'_original',ext)));
 disp('processing...'); 
 tic
 %generate images with synthetic WB effects
-out = WB_emulator.generate_wb_srgb(I_in); 
+out = WB_emulator.generate_wb_srgb(I_in, NumOfImgs); 
 toc
 if useGPU
     out = gather(out); %if GPU is used, convert images to a double tensor

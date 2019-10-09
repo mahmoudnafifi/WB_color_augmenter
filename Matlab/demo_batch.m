@@ -38,6 +38,11 @@ use_GPU = 0; %to use GPU
 datasetbase = fullfile('..','images'); %path of images directory
 output_dir = fullfile('..','results'); %output directory (will contain 
 % generated images and copy of original images
+NumOfImgs = 10; %should be less than or equal 10
+
+if NumOfImgs > 10
+    error('Cannot generate more than 10 images for each input image');
+end
 
 imds = imageDatastore(datasetbase,'IncludeSubfolders' ,1);
 images = {imds.Files{:}}'; %get all input filenames
@@ -58,7 +63,7 @@ for i = 1 : length (images) %for each input image, do
         '_original',ext)));
     try
         %generate images with synthetic WB effects
-        out = WB_emulator.generate_wb_srgb(I_in); 
+        out = WB_emulator.generate_wb_srgb(I_in, NumOfImgs); 
         if use_GPU==1 %if GPU is used, 
             out = gather(out); %convert gpuArray to double tensor
         end
