@@ -23,7 +23,7 @@ Our augmentation method can accurately emulate realistic color constancy degrada
     * `demo_batch` to process an image directory
     * `demo_WB_color_augmentation` to process an image directory and repeating the corresponding ground truth files for our generated images
     * `demo_GUI` (located in `GUI` directory) for a GUI interface 
-3. To use our emulator inside your code, please follow the following steps:
+3. To use the WB augmenter inside your code, please follow the following steps:
    * Either run install_() or addpath to our directories:
    ```
     addpath('src');
