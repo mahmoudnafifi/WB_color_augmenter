@@ -27,8 +27,8 @@
 % Camera styes are:
 %   - AS: Adobe Standard
 %   - CS: Camera Standard
-% The generated images and a copy of the input image will be saved in the
-% output directory (output_dir)
+% The generated images and a copy of the input image (optional) will be 
+% saved in the output directory (output_dir)
 
 %%
 clear; 
@@ -39,6 +39,7 @@ output_dir = fullfile('..','results'); % output directory to save the
 % generated images and a copy of input image
 useGPU = true; %to use GPU
 NumOfImgs = 10; % should be less than or equal 10
+saveOrig = true; %to save a copy of the original image in output_dir
 
 if NumOfImgs > 10
     error('Cannot generate more than 10 images for each input image');
@@ -56,8 +57,9 @@ end
 
 I_in = imread(imagename); % read the image
 [~,name,ext] = fileparts(imagename);
-% save a copy of the original image
-imwrite(I_in,fullfile(output_dir,sprintf('%s%s%s',name,'_original',ext)));
+if saveOrig == true % save a copy of the original image
+    imwrite(I_in,fullfile(output_dir,sprintf('%s%s%s',name,'_original',ext)));
+end
 
 %%
 disp('processing...'); 

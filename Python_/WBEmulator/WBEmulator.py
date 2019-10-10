@@ -21,31 +21,30 @@ import shutil
 
 class WBEmulator:
     def __init__(self):
-        self.features = np.load('params/features.npy')  # training encoded features
-        self.mappingFuncs = np.load('params/mappingFuncs.npy')  # mapping functions to emulate WB effects
-        self.encoderWeights = np.load('params/encoderWeights.npy')  # weight matrix for histogram encoding
-        self.encoderBias = np.load('params/encoderBias.npy')  # bias vector for histogram encoding
-        self.h = 60  # histogram bin width
-        self.K = 25  # K value for nearest neighbor searching
-        self.sigma = 0.25  # fall off factor for KNN
-        self.wb_photo_finishing = ['_F_AS', '_F_CS', '_S_AS', '_S_CS',
-                                   '_T_AS', '_T_CS', '_C_AS', '_C_CS',
-                                   '_D_AS', '_D_CS']  # WB & photo finishing styles
+        self.features = np.load('params/features.npy') # training encoded features
+        self.mappingFuncs = np.load('params/mappingFuncs.npy') # mapping functions to emulate WB effects
+        self.encoderWeights = np.load('params/encoderWeights.npy') # weight matrix for histogram encoding
+        self.encoderBias = np.load('params/encoderBias.npy') # bias vector for histogram encoding
+        self.h = 60 # histogram bin width
+        self.K = 25 # K value for nearest neighbor searching
+        self.sigma = 0.25 # fall off factor for KNN
+        self.wb_photo_finishing =  ['_F_AS', '_F_CS', '_S_AS', '_S_CS',
+                                    '_T_AS', '_T_CS', '_C_AS', '_C_CS',
+                                    '_D_AS', '_D_CS'] # WB & photo finishing styles
 
-    def encode(self, hist):  # encode given histogram
+    def encode(self, hist): #encode given histogram
         histR_reshaped = np.reshape(np.transpose(hist[:, :, 0]),
-                                    (1, int(hist.size / 3)), order="F")  # reshaped red layer of histogram
+                       (1, int(hist.size / 3)), order="F")  # reshaped red layer of histogram
         histG_reshaped = np.reshape(np.transpose(hist[:, :, 1]),
                                     (1, int(hist.size / 3)), order="F")  # reshaped green layer of histogram
         histB_reshaped = np.reshape(np.transpose(hist[:, :, 2]),
                                     (1, int(hist.size / 3)), order="F")  # reshaped blue layer of histogram
         hist_reshaped = np.append(histR_reshaped,
                                   [histG_reshaped, histB_reshaped])  # reshaped histogram n * 3 (n = h*h)
-        feature = np.dot(hist_reshaped - self.encoderBias.transpose(),
-                         self.encoderWeights)  # compute compacted histogram feature
+        feature = np.dot(hist_reshaped - self.encoderBias.transpose(), self.encoderWeights)  # compute compacted histogram feature
         return feature
 
-    def rgbUVhist(self, I):  # compute the RGB-uv histogram tensor
+    def rgbUVhist(self, I): #compute the RGB-uv histogram tensor
         sz = np.shape(I)  # get size of current image
         if sz[0] * sz[1] > 202500:  # if it is larger than 450*450
             factor = np.sqrt(202500 / (sz[0] * sz[1]))  # rescale factor
@@ -84,14 +83,14 @@ class WBEmulator:
             hist[:, :, i] = np.sqrt(hist[:, :, i] / norm_)  # (hist/norm)^(1/2)
         return hist
 
-    def generateWbsRGB(self, I, outNum=10):  # emulate WB | outNum number of images to generate is otpional
+
+    def generateWbsRGB(self, I, outNum = 10): #emulate WB | outNum number of images to generate is otpional
         I = cv2.cvtColor(I, cv2.COLOR_BGR2RGB)  # convert from BGR to RGB
         I = im2double(I)  # convert to double
         feature = self.encode(self.rgbUVhist(I))
-        if outNum < len(
-                self.wb_photo_finishing):  # if selected outNum is less than number of available WB & photo finishing (PF) styles,
-            # inds = np.random.permutation(len(self.wb_photo_finishing))  # randomize and select outNum WB & PF styles
-            # wb_pf = self.wb_photo_finishing[inds[0:outNum - 1]]  # wb_pf now represents the selected WB & PF styles
+        if outNum < len(self.wb_photo_finishing):  # if selected outNum is less than number of available WB & photo finishing (PF) styles,
+            #inds = np.random.permutation(len(self.wb_photo_finishing))  # randomize and select outNum WB & PF styles
+            #wb_pf = self.wb_photo_finishing[inds[0:outNum - 1]]  # wb_pf now represents the selected WB & PF styles
             wb_pf = rnd.sample(self.wb_photo_finishing, outNum)
             inds = []
             for j in range(outNum):
@@ -121,7 +120,7 @@ class WBEmulator:
             mf = sum(np.reshape(np.matlib.repmat(weightsH, 1, 27), (25, 1, 9, 3)) *
                      self.mappingFuncs[(idH - 1) * 10 + ind, :])  # compute the mapping function
             mf = mf.reshape(9, 3, order="F")  # reshape it to be 9 * 3
-            synthWBimages[:, :, :, i] = changeWB(I, mf)  # apply it!
+            synthWBimages[:, :, :, i] = changeWB(I, mf) # apply it!
         return synthWBimages, wb_pf
 
     def single_image_processing(self, in_img, out_dir="../results", outNum=10, write_original=1):
@@ -132,17 +131,17 @@ class WBEmulator:
             outImg = outImgs[:, :, :, i]  # get the ith output image
             cv2.imwrite(out_dir + '/' + os.path.basename(filename) +
                         wb_pf[i] + file_extension, outImg * 255)  # save it
-            if write_original == 1: # if write_original flag is true
+            if write_original == 1:
                 cv2.imwrite(out_dir + '/' + os.path.basename(filename) +
                             '_original' + file_extension, I)  # save original image
-
+							
     def batch_processing(self, in_dir, out_dir="../results", outNum=10, write_original=1):
-        imgfiles = [] # image files will be saved here
-        valid_images = (".jpg", ".bmp", ".png", ".tga") # valid image file extensions (modify it if needed)
-        for f in os.listdir(in_dir): # for each file in in_dir
-            if f.lower().endswith(valid_images): # if it belongs to our valid_images format
-                imgfiles.append(os.path.join(in_dir, f)) # append it to imgfiles
-        for in_img in imgfiles: # for each image file
+        imgfiles = []
+        valid_images = (".jpg", ".bmp", ".png", ".tga")
+        for f in os.listdir(in_dir):
+            if f.lower().endswith(valid_images):
+                imgfiles.append(os.path.join(in_dir, f))
+        for in_img in imgfiles:
             filename, file_extension = os.path.splitext(in_img)  # get file parts
             I = cv2.imread(in_img)  # read the image
             outImgs, wb_pf = self.generateWbsRGB(I, outNum)  # generate new images with different WB settings
@@ -150,14 +149,13 @@ class WBEmulator:
                 outImg = outImgs[:, :, :, i]  # get the ith output image
                 cv2.imwrite(out_dir + '/' + os.path.basename(filename) +
                             wb_pf[i] + file_extension, outImg * 255)  # save it
-                if write_original == 1: # if write_original flag is true
+                if write_original == 1:
                     cv2.imwrite(out_dir + '/' + os.path.basename(filename) +
                                 '_original' + file_extension, I)  # save original image
-
-
+        
     def trainingGT_processing(self, in_dir, out_dir, gt_dir, out_gt_dir, gt_ext,
                               outNum=10, write_original=1):
-        os.makedirs(out_dir, exist_ok=True)  # create output directory (if not exist)
+
         imgfiles = [] # image files will be saved here
         gtfiles = []  # ground truth files will be saved here
         valid_images = (".jpg", ".bmp", ".png", ".tga") # valid image file extensions (modify it if needed)
@@ -188,14 +186,16 @@ class WBEmulator:
                                 '_original' + file_extension, I)  # save original image
                     shutil.copyfile(gtfile, # copy corresponding gt file
                                     os.path.join(out_gt_dir, gtbasename + '_original' + gt_extension))
+        
+
 
 def changeWB(input, m):  # apply the given mapping function m to input image
-    sz = np.shape(input)  # get size of input image
-    I_reshaped = np.reshape(input, (int(input.size / 3), 3),
-                            order="F")  # reshape input to be n*3 (n: total number of pixels)
-    kernel_out = kernelP9(I_reshaped)  # raise input image to a higher-dim space
-    out = np.dot(kernel_out, m)  # apply m to the input image after raising it the selected higher degree
-    out = outOfGamutClipping(out)  # clip out-of-gamut pixels
+    sz = np.shape(input) # get size of input image
+    I_reshaped = np.reshape(input,(int(input.size/3),3),
+                            order="F") # reshape input to be n*3 (n: total number of pixels)
+    kernel_out = kernelP9(I_reshaped) # raise input image to a higher-dim space
+    out = np.dot(kernel_out, m) # apply m to the input image after raising it the selected higher degree
+    out = outOfGamutClipping(out) # clip out-of-gamut pixels
     out = out.reshape(sz[0], sz[1], sz[2], order="F")  # reshape output image back to the original image shape
     out = cv2.cvtColor(out.astype('float32'), cv2.COLOR_RGB2BGR)
     return out
@@ -203,16 +203,15 @@ def changeWB(input, m):  # apply the given mapping function m to input image
 
 def kernelP9(I):  # 9-poly kernel
     # kernel(r, g, b) = [r, g, b, r2, g2, b2, rg, rb, gb];
-    return (np.transpose((I[:, 0], I[:, 1], I[:, 2], I[:, 0] * I[:, 0],
-                          I[:, 1] * I[:, 1], I[:, 2] * I[:, 2], I[:, 0] * I[:, 1],
-                          I[:, 0] * I[:, 2], I[:, 1] * I[:, 2])))
+    return (np.transpose((I[:,0], I[:,1], I[:,2], I[:,0] * I[:,0],
+                           I[:,1] * I[:,1], I[:,2] * I[:,2], I[:, 0] * I[:, 1],
+                           I[:, 0] * I[:, 2], I[:, 1] * I[:, 2])))
 
 
 def outOfGamutClipping(I):  # out-of-gamut clipping
-    I[I > 1] = 1  # any pixel is higher than 1, clip it to 1
-    I[I < 0] = 0  # any pixel is below 0, clip it to 0
+    I[I > 1] = 1 # any pixel is higher than 1, clip it to 1
+    I[I < 0] = 0 # any pixel is below 0, clip it to 0
     return I
 
-
-def im2double(im):  # from uint8 (0->255) to double (0->1)
+def im2double(im): #from uint8 (0->255) to double (0->1)
     return cv2.normalize(im.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)

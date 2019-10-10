@@ -27,8 +27,8 @@
 % Camera styes are:
 %   - AS: Adobe Standard
 %   - CS: Camera Standard
-% The generated images and a copy of the input image will be saved in the
-% output directory (output_dir)
+% The generated images and a copy of the input image (optional) will be 
+% saved in the output directory (output_dir)
 
 %%
 clear;
@@ -39,6 +39,7 @@ datasetbase = fullfile('..','images'); % path of images directory
 output_dir = fullfile('..','results'); % output directory (will contain 
 % generated images and copy of original images
 NumOfImgs = 10; % should be less than or equal 10
+saveOrig = true; % to save a copy of original images in output_dir
 
 if NumOfImgs > 10
     error('Cannot generate more than 10 images for each input image');
@@ -58,9 +59,10 @@ for i = 1 : length (images) % for each input image, do
     imgin = images{i};
     I_in = imread(imgin); % read input image
     [~,name,ext] = fileparts(imgin);
-    imwrite(I_in,fullfile(output_dir,... % save a copy of it in output dir
-        sprintf('%s%s.%s',name,...
-        '_original',ext)));
+    if saveOrig == true
+        imwrite(I_in,fullfile(output_dir,... % save a copy of it in output dir
+            sprintf('%s%s.%s',name,'_original',ext)));
+    end
     try
         % generate images with synthetic WB effects
         out = WB_emulator.generate_wb_srgb(I_in, NumOfImgs); 

@@ -33,8 +33,8 @@
 % Camera styes are:
 %   - AS: Adobe Standard
 %   - CS: Camera Standard
-% The generated images and a copy of the input image will be saved in the
-% output directory (output_dir)
+% The generated images and a copy of the input image (optional) will be 
+% saved in the output directory (output_dir)
 
 %%
 
@@ -68,11 +68,13 @@ outNum = 2; % number of generated images for each original training image.
 % directory to save ground truth files for the augmented training images
 ground_truth_new_dir = fullfile('..','example','aug_ground_truth'); 
 
+saveOrig = true; % to save a copy of the original images in output_dir
+
 % start color augmentation
 disp('Starting color augmentation...');
 success = WBAug(training_set_dir, training_ext, output_dir, output_ext, ...
     ground_truth_dir, ground_truth_ext, ground_truth_new_dir,...
-    useGPU, usePar, outNum);
+    useGPU, usePar, outNum, saveOrig);
 disp('Done!');
 if success < 0 
     fprintf('There are %d files could not be processed!\n',abs(success));

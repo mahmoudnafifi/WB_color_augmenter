@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f2a419c3-ea02-4331-b4a4-40292c5def00" name="Default Changelist" comment="" />
+    <list default="true" id="f2a419c3-ea02-4331-b4a4-40292c5def00" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/WBEmulator/WBEmulator_backup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Matlab/demo_WB_color_augmentation.m" beforeDir="false" afterPath="$PROJECT_DIR$/../Matlab/demo_WB_color_augmentation.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Matlab/demo_batch.m" beforeDir="false" afterPath="$PROJECT_DIR$/../Matlab/demo_batch.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Matlab/demo_single_image.m" beforeDir="false" afterPath="$PROJECT_DIR$/../Matlab/demo_single_image.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Matlab/src/WBAug.m" beforeDir="false" afterPath="$PROJECT_DIR$/../Matlab/src/WBAug.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WBEmulator/WBEmulator.py" beforeDir="false" afterPath="$PROJECT_DIR$/WBEmulator/WBEmulator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/encoderBias.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/encoderWeights.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mappingFuncs.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.txt" beforeDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,10 +27,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="318">
+              <caret line="30" selection-start-line="30" selection-end-line="30" />
               <folding>
-                <element signature="e#116#126#0" expanded="true" />
+                <element signature="e#607#617#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -25,10 +39,22 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/WBEmulator/WBEmulator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="69" column="93" selection-start-line="69" selection-start-column="93" selection-end-line="69" selection-end-column="93" />
+            <state relative-caret-position="270">
+              <caret line="175" selection-start-line="175" selection-end-line="175" selection-end-column="53" />
               <folding>
-                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#608#626#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WBEmulator/WBEmulator_backup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="426">
+              <caret line="150" column="77" selection-start-line="150" selection-start-column="77" selection-end-line="150" selection-end-column="77" />
+              <folding>
+                <element signature="e#608#626#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -86,8 +112,9 @@
         <option value="$PROJECT_DIR$/webdemo.py" />
         <option value="$PROJECT_DIR$/backup_code.py" />
         <option value="$PROJECT_DIR$/trythis.py" />
-        <option value="$PROJECT_DIR$/demo.py" />
+        <option value="$PROJECT_DIR$/WBEmulator/WBEmulator_backup.py" />
         <option value="$PROJECT_DIR$/WBEmulator/WBEmulator.py" />
+        <option value="$PROJECT_DIR$/demo.py" />
       </list>
     </option>
   </component>
@@ -99,7 +126,7 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
@@ -108,27 +135,29 @@
           <expand>
             <path>
               <item name="Python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Python" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Python" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Python" type="462c0819:PsiDirectoryNode" />
-              <item name="WBEmulator" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Python" type="b2602c69:ProjectViewProjectNode" />
               <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="Python" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="C:\Users\mafifi\Documents\GitHub\WB_color_augmenter\Python" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="PyConsoleConfigurable.Python Console" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -218,15 +247,16 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24973433" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.24973433" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection Results" visible="true" weight="0.32928312" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.32928312" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" weight="0.32928312" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="bottom" id="Version Control" order="5" />
-      <window_info active="true" anchor="bottom" id="Run" order="6" visible="true" weight="0.4131227" />
+      <window_info anchor="bottom" id="Run" order="6" weight="0.4131227" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.399757" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
@@ -374,20 +404,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WBEmulator/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/WBEmulator/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backup_code.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -424,7 +440,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trythis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
+        <state relative-caret-position="-1668">
           <caret line="70" column="92" lean-forward="true" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="92" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
@@ -432,22 +448,46 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/WBEmulator/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WBEmulator/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="8" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WBEmulator/WBEmulator_backup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="426">
+          <caret line="150" column="77" selection-start-line="150" selection-start-column="77" selection-end-line="150" selection-end-column="77" />
+          <folding>
+            <element signature="e#608#626#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/demo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="318">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
           <folding>
-            <element signature="e#116#126#0" expanded="true" />
+            <element signature="e#607#617#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/WBEmulator/WBEmulator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="69" column="93" selection-start-line="69" selection-start-column="93" selection-end-line="69" selection-end-column="93" />
+        <state relative-caret-position="270">
+          <caret line="175" selection-start-line="175" selection-end-line="175" selection-end-column="53" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#608#626#0" expanded="true" />
           </folding>
         </state>
       </provider>

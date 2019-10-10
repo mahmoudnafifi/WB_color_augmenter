@@ -15,7 +15,7 @@
 
 function success = WBAug(input_dir, input_ext, output_dir, output_ext, ...
     groundTruth_dir, groundTruth_ext, groundTruth_output_dir,...
-    useGPU, usePar, outNum)
+    useGPU, usePar, outNum, saveOrig)
 
 % WBAug function: Generate X images with different white balance settings
 % and camera styles, where X<=10.
@@ -29,9 +29,11 @@ function success = WBAug(input_dir, input_ext, output_dir, output_ext, ...
 %   -groundTruth_ext: file extension(s) of ground truth files
 %   -groundTruth_output_dir: new directory of ground truth files (after
 %   augmentation)
-%   -useGPU:
-%   -usePar:
-%   -outNum:
+%   -useGPU: true to use GPU
+%   -usePar: true to use parallel computation 
+%   -outNum: number of new images per each input image (should be <= 10)
+%   -saveOrig: true to save copy of each input image in the output_dir
+
 % Output:
 %   -success: If success is 1, there was no error. If success = 0, the 
 %   function coud not generate any image (there is a major error). If 
@@ -93,7 +95,6 @@ if exist(output_dir,'dir') == 0 % create out dir if not exist
     mkdir(output_dir);
 end
 
-
 if exist(groundTruth_output_dir,'dir') == 0 % same for ground truth
     mkdir(groundTruth_output_dir);
 end
@@ -107,7 +108,6 @@ for i = 1 : length(files)
 end
 
 [~,~,indices] = intersect(lower(temp_names),lower(GTnames));
-
 
 fprintf('\n\nProcessing...\n\n');
 
@@ -133,13 +133,14 @@ if usePar == 1 % if use parallel computing
                 fullfile(groundTruth_output_dir,[GTnames{indices(i)}...
                 '_' pf{j} GT_ext{i}]));
             
-            % save original image and corresponding ground truth
-            imwrite(I,fullfile(output_dir,sprintf('%s%s%s',...
-                imagename(1:end-4),'_original',output_ext)));
-            copyfile(fullfile(groundTruth_dir,GTfiles{...
-                indices(i)}),...
-                fullfile(groundTruth_output_dir,[GTnames{indices(i)}...
-                '_original' GT_ext{i}]));
+            if saveOrig == true % save original image and corresponding ground truth
+                imwrite(I,fullfile(output_dir,sprintf('%s%s%s',...
+                    imagename(1:end-4),'_original',output_ext)));
+                copyfile(fullfile(groundTruth_dir,GTfiles{...
+                    indices(i)}),...
+                    fullfile(groundTruth_output_dir,[GTnames{indices(i)}...
+                    '_original' GT_ext{i}]));
+            end
         end
     end
 else % no parallel
@@ -164,13 +165,14 @@ else % no parallel
                 fullfile(groundTruth_output_dir,[GTnames{indices(i)}...
                 '_' pf{j} GT_ext{i}]));
             
-            % save original image and corresponding ground truth
-            imwrite(I,fullfile(output_dir,sprintf('%s%s%s',...
-                imagename(1:end-4),'_original',output_ext)));
-            copyfile(fullfile(groundTruth_dir,GTfiles{...
-                indices(i)}),...
-                fullfile(groundTruth_output_dir,[GTnames{indices(i)}...
-                '_original' GT_ext{i}]));
+            if saveOrig == true % save original image and corresponding ground truth
+                imwrite(I,fullfile(output_dir,sprintf('%s%s%s',...
+                    imagename(1:end-4),'_original',output_ext)));
+                copyfile(fullfile(groundTruth_dir,GTfiles{...
+                    indices(i)}),...
+                    fullfile(groundTruth_output_dir,[GTnames{indices(i)}...
+                    '_original' GT_ext{i}]));
+            end
         end
     end
 end
