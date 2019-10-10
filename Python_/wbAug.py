@@ -13,7 +13,7 @@
 
 import os
 import argparse
-from WBEmulator import WBEmulator as wb
+from WBAugmenter import WBEmulator as wbAug
 
 
 def parse_args():
@@ -30,7 +30,7 @@ def parse_args():
     return parser.parse_args()
 
 def main():
-    wbColorAug = wb.WBEmulator()  # create an instance of the WB emulator
+    wbColorAug = wbAug.WBEmulator()  # create an instance of the WB emulator
     args = parse_args()  # parse input arguments
     if args.input_image_dir is not None and args.ground_truth_dir is not None:  # if input and ground truth directories are provided, augment training/ground truth files
         if args.out_dir is None:

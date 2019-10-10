@@ -124,6 +124,7 @@ class WBEmulator:
         return synthWBimages, wb_pf
 
     def single_image_processing(self, in_img, out_dir="../results", outNum=10, write_original=1):
+        print("processing image: " + in_img + "\n")
         filename, file_extension = os.path.splitext(in_img)  # get file parts
         I = cv2.imread(in_img)  # read the image
         outImgs, wb_pf = self.generateWbsRGB(I, outNum)  # generate new images with different WB settings
@@ -142,6 +143,7 @@ class WBEmulator:
             if f.lower().endswith(valid_images):
                 imgfiles.append(os.path.join(in_dir, f))
         for in_img in imgfiles:
+            print("processing image: " + in_img + "\n")		
             filename, file_extension = os.path.splitext(in_img)  # get file parts
             I = cv2.imread(in_img)  # read the image
             outImgs, wb_pf = self.generateWbsRGB(I, outNum)  # generate new images with different WB settings
@@ -169,6 +171,7 @@ class WBEmulator:
             gtfiles.append(os.path.join(gt_dir,os.path.basename(filename) + gt_ext))
 
         for in_img, gtfile in zip(imgfiles,gtfiles): # for each image file
+            print("processing image: " + in_img + "\n")
             filename, file_extension = os.path.splitext(in_img)  # get file parts
             gtbasename, gt_extension = os.path.splitext(gtfile)  # get file parts
             gtbasename = os.path.basename(gtbasename)

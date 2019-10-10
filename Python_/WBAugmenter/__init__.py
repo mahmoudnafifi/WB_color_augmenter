@@ -11,6 +11,6 @@
 # Email: mafifi@eecs.yorku.ca | m.3afifi@gmail.com
 ######################################################################################
 
-name = "WBEmulator"
+name = "WBAugmenter"
 
-from WBEmulator import WBEmulator
+from WBAugmenter import WBEmulator

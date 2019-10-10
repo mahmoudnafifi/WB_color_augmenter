@@ -13,8 +13,8 @@
 
 import cv2
 import os
-from WBEmulator import WBEmulator as wb
-wbColorAug = wb.WBEmulator() # create an instance of the WB emulator
+from WBAugmenter import WBEmulator as wbAug
+wbColorAug = wbAug.WBEmulator() # create an instance of the WB emulator
 in_img = "../images/image2.jpg" # input image filename
 filename, file_extension = os.path.splitext(in_img) # get file parts
 out_dir = "../results" # output directory
