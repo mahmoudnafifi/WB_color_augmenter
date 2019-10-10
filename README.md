@@ -30,7 +30,7 @@ Our augmentation method can accurately emulate realistic color constancy degrada
     * `python wbAug.py --input_image_dir="../images" --out_dir="../results" --out_number=5 --write_original=0`
   * Augment all training images and generate corresponding ground truth files (generate three images and copies of original images): 
     * `python wbAug.py --input_image_dir="../example/training_set" --ground_truth_dir="../example/ground_truth" --ground_truth_ext=".png" --out_dir="../new_training_set" --out_ground_truth="../new_ground_truth" --out_number=3 --write_original=1`
-3. `demo.py` shows an example of how to use the `WBEmulator` package
+3. `demo.py` shows an example of how to use the `WBEmulator` module
 
 
 #### 2. Matlab:
