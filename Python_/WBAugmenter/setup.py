@@ -17,7 +17,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="WBcolorAug-afifi",
+    name="WBAugmenter",
     version="0.0.0",
     author="Mahmoud Afifi",
     author_email="mafifi@eecs.yorku.ca",
