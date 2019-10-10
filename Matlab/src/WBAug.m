@@ -39,62 +39,62 @@ function success = WBAug(input_dir, input_ext, output_dir, output_ext, ...
 %    images that could not be processed.
 
 
-L = 10; %maximum number of images we can generate per training image
-success = 0; %initialization
-if useGPU == 1 %use GPU?
+L = 10; % maximum number of images we can generate per training image
+success = 0; % initialization
+if useGPU == 1 % use GPU?
     try
-        reset(gpuDevice); %reset GPU device
-        SynthWB = load('synthWBmodel_GPU.mat'); %load GPU model
+        reset(gpuDevice); % reset GPU device
+        SynthWB = load('synthWBmodel_GPU.mat'); % load GPU model
     catch
-        if exist('synthWBmodel_GPU.mat','file') ~=0 %error in GPU device
-            fprintf('Error: cannot access GPU device\n'); %error
+        if exist('synthWBmodel_GPU.mat','file') ~=0 % error in GPU device
+            fprintf('Error: cannot access GPU device\n'); % error
             return
-        else %could not find the model
+        else % could not find the model
             fprintf('Error: cannot find the model(s)\n');
             return
         end
     end
     
 else
-    SynthWB = load('synthWBmodel.mat'); %load CPU model
+    SynthWB = load('synthWBmodel.mat'); % load CPU model
 end
 
-if outNum > L %if selected number of generated images > max number of allowed iamges
+if outNum > L % if selected number of generated images > max number of allowed iamges
     fprintf('Error: Number of images should be <= %d\n',...
         L);
     return
 end
-files = []; %training images
+files = []; % training images
 for i = 1 : length(input_ext)
     ext = input_ext{i};
     temp = dir(fullfile(input_dir,['*' ext]));
     files = [files; {temp(:).name}'];
 end
 
-GTfiles = []; %ground truth files
+GTfiles = []; % ground truth files
 for i = 1 : length(groundTruth_ext)
     ext = groundTruth_ext{i};
     temp = dir(fullfile(groundTruth_dir,['*' ext]));
     GTfiles = [GTfiles; {temp(:).name}'];
 end
 
-if length(files) ~= length(GTfiles) %if not equal, error!
+if length(files) ~= length(GTfiles) % if not equal, error!
     fprintf(['Error: Number of training files and ground truth files '...
         'must be the same\n']);
     return
 end
 
-if isempty(files) == 1 %if no files were found
+if isempty(files) == 1 % if no files were found
     fprintf('Error: No training files are found\n');
     return
 end
 
-if exist(output_dir,'dir') == 0 %create out dir if not exist
+if exist(output_dir,'dir') == 0 % create out dir if not exist
     mkdir(output_dir);
 end
 
 
-if exist(groundTruth_output_dir,'dir') == 0 %same for ground truth
+if exist(groundTruth_output_dir,'dir') == 0 % same for ground truth
     mkdir(groundTruth_output_dir);
 end
 
@@ -111,21 +111,21 @@ end
 
 fprintf('\n\nProcessing...\n\n');
 
-if usePar == 1 %if use parallel computing 
+if usePar == 1 % if use parallel computing 
     parfor i = 1 : length(files)
-        I = im2double(imread(fullfile(input_dir,files{i}))); %read image
-        try %apply our WB augmenter
+        I = im2double(imread(fullfile(input_dir,files{i}))); % read image
+        try % apply our WB augmenter
         [out,pf] = SynthWB.WB_emulator.generate_wb_srgb(I,outNum);
-        if useGPU==1 %if that was on GPU, convert to double tensor
+        if useGPU==1 % if that was on GPU, convert to double tensor
             out = gather(out);
         end
         catch
             fprintf('Error in image %s!\n', fullfile(input_dir,files{i}));
-            success = success - 1; %couldn't? decrease success
+            success = success - 1; % couldn't? decrease success
             continue;
         end
         for j =1 : size(out,4)
-            imagename = files{i}; %save generated images and copy corresponding ground truth
+            imagename = files{i}; % save generated images and copy corresponding ground truth
             imwrite(out(:,:,:,j),fullfile(output_dir,sprintf('%s%s%s',...
                 imagename(1:end-4),pf{j},output_ext)));
             copyfile(fullfile(groundTruth_dir,GTfiles{...
@@ -133,7 +133,7 @@ if usePar == 1 %if use parallel computing
                 fullfile(groundTruth_output_dir,[GTnames{indices(i)}...
                 '_' pf{j} GT_ext{i}]));
             
-            %save original image and corresponding ground truth
+            % save original image and corresponding ground truth
             imwrite(I,fullfile(output_dir,sprintf('%s%s%s',...
                 imagename(1:end-4),'_original',output_ext)));
             copyfile(fullfile(groundTruth_dir,GTfiles{...
@@ -142,20 +142,20 @@ if usePar == 1 %if use parallel computing
                 '_original' GT_ext{i}]));
         end
     end
-else %no parallel
+else % no parallel
     for i = 1 : length(files)
         I = im2double(imread(fullfile(input_dir,files{i}))); %read image
-        try %apply our WB augmenter
+        try % apply our WB augmenter
             [out,pf] = SynthWB.WB_emulator.generate_wb_srgb(I,outNum);
-            if useGPU==1 %if GPU is used, convert to double tensor
+            if useGPU==1 % if GPU is used, convert to double tensor
                 out = gather(out);
             end
         catch
             fprintf('Error in image %s!\n', fullfile(input_dir,files{i}));
-            success = success - 1; %coudln't? decrease success
+            success = success - 1; % coudln't? decrease success
             continue;
         end
-        for j =1 : size(out,4) %save generated images and corresponding ground truth
+        for j =1 : size(out,4) % save generated images and corresponding ground truth
             imagename = files{i};
             imwrite(out(:,:,:,j),fullfile(output_dir,sprintf('%s%s%s',...
                 imagename(1:end-4),pf{j},output_ext)));
@@ -164,7 +164,7 @@ else %no parallel
                 fullfile(groundTruth_output_dir,[GTnames{indices(i)}...
                 '_' pf{j} GT_ext{i}]));
             
-            %save original image and corresponding ground truth
+            % save original image and corresponding ground truth
             imwrite(I,fullfile(output_dir,sprintf('%s%s%s',...
                 imagename(1:end-4),'_original',output_ext)));
             copyfile(fullfile(groundTruth_dir,GTfiles{...
@@ -174,7 +174,7 @@ else %no parallel
         end
     end
 end
-if success == 0 %if there wasn't any failure cases, return success = 1
+if success == 0 % if there wasn't any failure cases, return success = 1
     success = 1;
 end
 end

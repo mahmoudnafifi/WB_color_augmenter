@@ -34,11 +34,11 @@
 clear; 
 clc
 
-imagename = fullfile('..','images','image1.jpg'); %image filename
-output_dir = fullfile('..','results'); %output directory to save the 
+imagename = fullfile('..','images','image1.jpg'); % image filename
+output_dir = fullfile('..','results'); % output directory to save the 
 % generated images and a copy of input image
-useGPU = false; %to use GPU
-NumOfImgs = 10; %should be less than or equal 10
+useGPU = true; %to use GPU
+NumOfImgs = 10; % should be less than or equal 10
 
 if NumOfImgs > 10
     error('Cannot generate more than 10 images for each input image');
@@ -49,29 +49,29 @@ if exist(output_dir,'dir') == 0
 end
 
 if useGPU
-    load('synthWBmodel_GPU.mat'); %load WB_emulator GPU model
+    load('synthWBmodel_GPU.mat'); % load WB_emulator GPU model
 else
-    load('synthWBmodel.mat'); %load WB_emulator CPU model
+    load('synthWBmodel.mat'); % load WB_emulator CPU model
 end
 
-I_in = imread(imagename); %read the image
+I_in = imread(imagename); % read the image
 [~,name,ext] = fileparts(imagename);
-%save a copy of the original image
+% save a copy of the original image
 imwrite(I_in,fullfile(output_dir,sprintf('%s%s%s',name,'_original',ext)));
 
 %%
 disp('processing...'); 
 tic
-%generate images with synthetic WB effects
+% generate images with synthetic WB effects
 out = WB_emulator.generate_wb_srgb(I_in, NumOfImgs); 
 toc
 if useGPU
-    out = gather(out); %if GPU is used, convert images to a double tensor
+    out = gather(out); % if GPU is used, convert images to a double tensor
 end
 disp('done!'); 
 disp('saving...'); 
 for i =1 : size(out,4)
-    %save generated images
+    % save generated images
     imwrite(out(:,:,:,i),fullfile(output_dir,sprintf('%s%s%s',...
         name,WB_emulator.wb_photo_finishing{i},ext)));
 end

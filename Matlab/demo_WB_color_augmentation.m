@@ -43,32 +43,32 @@ clear
 close all
 warning off
 
-training_set_dir = fullfile('..','example','training_set'); %training data path
+training_set_dir = fullfile('..','example','training_set'); % training data path
 
-ground_truth_dir = fullfile('..','example','ground_truth'); %ground truth path
+ground_truth_dir = fullfile('..','example','ground_truth'); % ground truth path
 
-training_ext = {'.JPG','.PNG'}; %file extension of training images (you can add more)
+training_ext = {'.JPG','.PNG'}; % file extension of training images (you can add more)
 
-ground_truth_ext = {'.PNG'};  %file extension of ground truth data 
+ground_truth_ext = {'.PNG'};  % file extension of ground truth data 
 % be sure that your ground truth data is saved in the same names of 
 % corresponding training images
 
-output_ext = '.jpeg'; %output extension of our generated images
+output_ext = '.jpeg'; % output extension of our generated images
 
-output_dir = fullfile('..','example','aug_training_set'); %directory to save 
+output_dir = fullfile('..','example','aug_training_set'); % directory to save 
 % generated images and copy of original training images
 
-useGPU = 0; %to use GPU
+useGPU = 0; % to use GPU
 
-usePar = 0; %to use parallel computing (requires Matlab parallel computing toolbox)
+usePar = 0; % to use parallel computing (requires Matlab parallel computing toolbox)
 
-outNum = 2; %number of generated images for each original training image. 
+outNum = 2; % number of generated images for each original training image. 
 %If less than 10, it will randomize between the allowed 10 versions
 
-%directory to save ground truth files for the augmented training images
+% directory to save ground truth files for the augmented training images
 ground_truth_new_dir = fullfile('..','example','aug_ground_truth'); 
 
-%start color augmentation
+% start color augmentation
 disp('Starting color augmentation...');
 success = WBAug(training_set_dir, training_ext, output_dir, output_ext, ...
     ground_truth_dir, ground_truth_ext, ground_truth_new_dir,...

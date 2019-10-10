@@ -142,7 +142,7 @@ function k_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 global WB_emulator
-global I_temp
+global I
 global feature
 global outImages
 axes(handles.image);
@@ -150,7 +150,7 @@ handles.status.String = 'Processing...';pause(0.001);
 k = handles.k.Value;
 sigma = handles.sigma.Value;
 WB_emulator.K = round(k);
-outImages = WB_emulator.generate_wb_srgb(I_temp,10,feature,sigma);
+outImages = WB_emulator.generate_wb_srgb(I,10,feature,sigma);
 for i = 1 : size(outImages,4)
     tempstr= WB_emulator.wb_photo_finishing{i};
     eval(sprintf('axes(handles.%s);',tempstr(2:end)));
@@ -185,7 +185,7 @@ function sigma_Callback(hObject, eventdata, handles)
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
 global WB_emulator
-global I_temp
+global I
 global feature
 global outImages
 axes(handles.image);
@@ -193,7 +193,7 @@ handles.status.String = 'Processing...';pause(0.001);
 k = handles.k.Value;
 sigma = handles.sigma.Value;
 WB_emulator.K = round(k);
-outImages = WB_emulator.generate_wb_srgb(I_temp,10,feature,sigma);
+outImages = WB_emulator.generate_wb_srgb(I,10,feature,sigma);
 for i = 1 : size(outImages,4)
     tempstr= WB_emulator.wb_photo_finishing{i};
     eval(sprintf('axes(handles.%s);',tempstr(2:end)));

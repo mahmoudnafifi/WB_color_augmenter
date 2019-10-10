@@ -34,40 +34,40 @@
 clear;
 clc;
 
-use_GPU = 0; %to use GPU
-datasetbase = fullfile('..','images'); %path of images directory
-output_dir = fullfile('..','results'); %output directory (will contain 
+use_GPU = 0; % to use GPU
+datasetbase = fullfile('..','images'); % path of images directory
+output_dir = fullfile('..','results'); % output directory (will contain 
 % generated images and copy of original images
-NumOfImgs = 10; %should be less than or equal 10
+NumOfImgs = 10; % should be less than or equal 10
 
 if NumOfImgs > 10
     error('Cannot generate more than 10 images for each input image');
 end
 
 imds = imageDatastore(datasetbase,'IncludeSubfolders' ,1);
-images = {imds.Files{:}}'; %get all input filenames
+images = {imds.Files{:}}'; % get all input filenames
 
 if use_GPU==1
-    load('synthWBmodel_GPU.mat'); %load WB_emulator GPU model
+    load('synthWBmodel_GPU.mat'); % load WB_emulator GPU model
 else
-    load('synthWBmodel.mat'); %load WB_emulator CPU model
+    load('synthWBmodel.mat'); % load WB_emulator CPU model
 end
 
-for i = 1 : length (images) %for each input image, do
+for i = 1 : length (images) % for each input image, do
     fprintf('processing image: %s...\n',images{i});
     imgin = images{i};
-    I_in = imread(imgin); %read input image
+    I_in = imread(imgin); % read input image
     [~,name,ext] = fileparts(imgin);
-    imwrite(I_in,fullfile(output_dir,... %save a copy of it in output dir
+    imwrite(I_in,fullfile(output_dir,... % save a copy of it in output dir
         sprintf('%s%s.%s',name,...
         '_original',ext)));
     try
-        %generate images with synthetic WB effects
+        % generate images with synthetic WB effects
         out = WB_emulator.generate_wb_srgb(I_in, NumOfImgs); 
-        if use_GPU==1 %if GPU is used, 
-            out = gather(out); %convert gpuArray to double tensor
+        if use_GPU==1 % if GPU is used, 
+            out = gather(out); % convert gpuArray to double tensor
         end
-        for j =1 : size(out,4) %save generated images
+        for j =1 : size(out,4) % save generated images
             imwrite(out(:,:,:,j),fullfile(output_dir,...
                 sprintf('%s%s%s',name,...
                 WB_emulator.wb_photo_finishing{j},ext)));
