@@ -18,6 +18,7 @@ wbColorAug = wbAug.WBEmulator() # create an instance of the WB emulator
 in_img = "../images/image2.jpg" # input image filename
 filename, file_extension = os.path.splitext(in_img) # get file parts
 out_dir = "../results" # output directory
+os.makedirs(out_dir, exist_ok=True)
 I = cv2.imread(in_img) # read the image
 outNum = 5 # number of images to generate (should be <= 10)
 outImgs, wb_pf = wbColorAug.generateWbsRGB(I,outNum) # generate new images with different WB settings
