@@ -22,13 +22,13 @@ Our augmentation method can accurately emulate realistic color constancy degrada
   * `pip install numpy`
   * `pip install opencv-python`
 2. Run `wbAug.py`; examples:
-  * Process a singe image (generate ten new images and a copy of the given image): 
+  * Input a single image to generate ten new images and a copy of the original one: 
     * `python wbAug.py --input_image_filename="../images/image1.jpg"`
-  * Process all images in a directory (for each image, generate ten images and copies of original images):
+  * For each input image in a given directory, it generates ten images and copies of original images:
     * `python wbAug.py --input_image_dir="../images"`
-  * Process all images in a directory (for each image, generate five images without original images): 
+  * For each input image in a given directory, it generates five images without original images: 
     * `python wbAug.py --input_image_dir="../images" --out_dir="../results" --out_number=5 --write_original=0`
-  * Augment all training images and generate corresponding ground truth files (generate three images and copies of original images): 
+  * For all training image located in a given directory, it generates three images and copies of original images. Also, it will copy corresponding ground truth files: 
     * `python wbAug.py --input_image_dir="../example/training_set" --ground_truth_dir="../example/ground_truth" --ground_truth_ext=".png" --out_dir="../new_training_set" --out_ground_truth="../new_ground_truth" --out_number=3 --write_original=1`
 3. `demo.py` shows an example of how to use the `WBEmulator` module
 
