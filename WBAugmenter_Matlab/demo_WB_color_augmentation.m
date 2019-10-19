@@ -47,7 +47,7 @@ training_set_dir = fullfile('..','example','training_set'); % training data path
 
 ground_truth_dir = fullfile('..','example','ground_truth'); % ground truth path
 
-training_ext = {'.JPG','.PNG'}; % file extension of training images (you can add more)
+training_ext = {'.jpg','.png'}; % file extension of training images (you can add more)
 
 ground_truth_ext = {'.PNG'};  % file extension of ground truth data 
 % be sure that your ground truth data is saved in the same names of 
