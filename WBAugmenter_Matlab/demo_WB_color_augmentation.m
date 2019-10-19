@@ -43,9 +43,9 @@ clear
 close all
 warning off
 
-training_set_dir = fullfile('..','example','training_set'); % training data path
+training_set_dir = fullfile('..','..','example','training_set'); % training data path
 
-ground_truth_dir = fullfile('..','example','ground_truth'); % ground truth path
+ground_truth_dir = fullfile('..','..','example','ground_truth'); % ground truth path
 
 training_ext = {'.jpg','.png'}; % file extension of training images (you can add more)
 
@@ -55,7 +55,7 @@ ground_truth_ext = {'.PNG'};  % file extension of ground truth data
 
 output_ext = '.jpeg'; % output extension of our generated images
 
-output_dir = fullfile('..','example','aug_training_set'); % directory to save 
+output_dir = fullfile('..','new_training_set'); % directory to save 
 % generated images and copy of original training images
 
 useGPU = 0; % to use GPU
@@ -66,7 +66,7 @@ outNum = 2; % number of generated images for each original training image.
 %If less than 10, it will randomize between the allowed 10 versions
 
 % directory to save ground truth files for the augmented training images
-ground_truth_new_dir = fullfile('..','example','aug_ground_truth'); 
+ground_truth_new_dir = fullfile('..','new_ground_truth'); 
 
 saveOrig = true; % to save a copy of the original images in output_dir
 
