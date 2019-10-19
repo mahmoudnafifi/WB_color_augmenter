@@ -37,7 +37,7 @@ clc
 imagename = fullfile('..','images','image1.jpg'); % image filename
 output_dir = fullfile('..','results'); % output directory to save the 
 % generated images and a copy of input image
-useGPU = true; %to use GPU
+useGPU = false; %to use GPU
 NumOfImgs = 10; % should be less than or equal 10
 saveOrig = true; %to save a copy of the original image in output_dir
 
