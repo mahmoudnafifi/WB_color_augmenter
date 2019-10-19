@@ -17,8 +17,8 @@ function success = WBAug(input_dir, input_ext, output_dir, output_ext, ...
     groundTruth_dir, groundTruth_ext, groundTruth_output_dir,...
     useGPU, usePar, outNum, saveOrig)
 
-% WBAug function: Generate X images with different white balance settings
-% and camera styles, where X<=10.
+% WBAug function: Generates outNum images with different white balance 
+% settings and camera styles, where outNum<=10.
 % Input:
 %   -input_dir: directory of training images
 %   -input_ext: file extension(s) of training images

@@ -20,6 +20,7 @@ classdef PCAFeature
     end
     methods
         function feature = encode(obj,hist)
+		% Generates a compacted feature of a given histogram tensor.
             feature = (reshape(hist,1,[]) - obj.bias') *obj.weights;
         end
     end

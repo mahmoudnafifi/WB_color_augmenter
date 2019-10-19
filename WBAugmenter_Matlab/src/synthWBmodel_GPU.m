@@ -13,7 +13,8 @@
 % Email: mafifi@eecs.yorku.ca | m.3afifi@gmail.com
 %%
 
-classdef synthWBmodel
+classdef synthWBmodel_GPU
+% WB emulator GPU model
     properties
         features % training features
         mappingFuncs9 % training mapping functions 9x3 poly
@@ -23,58 +24,61 @@ classdef synthWBmodel
     end
     methods
         
-        function feature = encode(obj,hist) % encode RGB-histogram feature
+        function feature = encode(obj,hist)
+		% Generates a compacted feature of a given histogram tensor.
             feature =  obj.encoder.encode(hist);
         end
         
-        function hist = RGB_UVhist(obj,I)  % generate RGB-histogram
+        function hist = RGB_UVhist(obj,I)
+		% Generates an RGB-histogram tensor of a given image I.
             I = im2double(I);
-            if size(I,1)*size(I,2) > 202500 % if input image > (450*450), 
+            if size(I,1)*size(I,2) > 202500 % if input image > (450*450),
                 factor = sqrt(202500/(size(I,1)*size(I,2))); % scale factor
                 newH = floor(size(I,1)*factor); % new dimensions
                 newW = floor(size(I,2)*factor);
-                I = imresize(I,[newH,newW],'nearest'); % scale it down
+                I = imresize(I,[newH,newW]); % scale it down
             end
             
             h= sqrt(max(size(obj.encoder.weights,1),...
                 size(obj.encoder.weights,2))/3); % histogram dimension
             eps= 6.4/h; % threshold 
             I=(reshape(I,[],3)); % reshape input image
-            A=[-3.2:eps:3.19]; % dummy vector
-            hist=zeros(size(A,2),size(A,2),3); % histogram tensor will be stored here
+            A=gpuArray([-3.2:eps:3.19]); % dummy vector
+            hist=gpuArray(zeros(size(A,2),size(A,2),3)); % histogram tensor will be stored here
             i_ind=I(:,1)~=0 & I(:,2)~=0 & I(:,3)~=0; % remove zero pixels
-            I=I(i_ind,:); 
+            I=I(i_ind,:);
             Iy=sqrt(I(:,1).^2+I(:,2).^2+I(:,3).^2); % intensity vector
             for i = 1 : 3 % for each layer in the histogram
                 r = setdiff([1,2,3],i); % extract the current color channel
-                Iu=log((I(:,i))./(I(:,r(1)))); % Iu vector
-                Iv=log((I(:,i))./(I(:,r(2)))); % Iv vector
+                Iu=log(abs((I(:,i))./(I(:,r(1))))); % Iu vector
+                Iv=log(abs((I(:,i))./(I(:,r(2))))); % Iv vector
                 diff_u=abs(Iu-A); % differences in u space
                 diff_v=abs(Iv-A); % differences in v space
                 diff_u=(reshape((reshape(diff_u,[],1)<=eps/2),...
                     [],size(A,2))); % set 1's for all pixels below the threshold
                 diff_v=(reshape((reshape(diff_v,[],1)<=eps/2),...
                     [],size(A,2))); % the same in the v space
-                hist(:,:,i)= ... % hist = Iy .* diff_u' * diff_v (.* element-wise mult)
-                    (Iy.*double(diff_u))'*double(diff_v); 
-                hist(:,:,i)= ... %final hist is sqrt(hist/sum(hist))
+                hist(:,:,i)=... % hist = Iy .* diff_u' * diff_v (.* element-wise mult)
+                    (Iy.*double(diff_u))'*double(diff_v);
+                hist(:,:,i)=... %final hist is sqrt(hist/sum(hist))
                     sqrt(hist(:,:,i)/sum(sum(hist(:,:,i))));
             end
-            hist = imresize(hist,[h h],'bilinear');
+            hist = imresize(hist,[h h]);
         end
         
         function [synthWBimages,wb_pf] = generate_wb_srgb (obj,I, ...
-                outNum, feature, sigma) % WB emulation
-            I = im2double(I); % convert to double 
+                outNum, feature, sigma)
+		% Generates outNum new images from a given image I, where outNum should be <=10
+            I = im2double(I); % convert to double
             if nargin == 2
                 outNum = length(obj.wb_photo_finishing); % use all WB & PF styles (default)
                 feature = obj.encode(obj.RGB_UVhist(I)); % encode histogram of I
                 sigma = 0.25; % fall-off factor
             elseif nargin == 3
-                feature = obj.encode(obj.RGB_UVhist(I)); 
-                sigma = 0.25; 
+                feature = obj.encode(obj.RGB_UVhist(I));
+                sigma = 0.25;
             elseif nargin == 4
-                sigma = 0.25; 
+                sigma = 0.25;
             end
             
             if outNum > length(obj.wb_photo_finishing) % if selected styles > the available WB & PF styles
@@ -90,15 +94,14 @@ classdef synthWBmodel
                 wb_pf = obj.wb_photo_finishing; % otherwise, use all available WB & PF styles
                 inds = [1:length(wb_pf)];
             end
-            
-            synthWBimages = zeros(size(I,1),size(I,2),size(I,3),...
-                length(wb_pf)); % new images will be stored here
+            synthWBimages = gpuArray(zeros(size(I,1),size(I,2),size(I,3),...
+                length(wb_pf))); % new images will be stored here as a GPU array
             
             [dH,idH] = pdist2(obj.features,feature,...
                 'euclidean','Smallest',obj.K); % K nearest neighbor
             weightsH = exp(-((dH).^2)/(2*sigma^2)); % compute blending weights
             weightsH = weightsH/sum(weightsH); % normalize weights
-            count = 1; 
+            count = 1;
             for i = inds(1:outNum) % for each WB & PF style, do
                 mf = sum(weightsH .* ... % compute mapping funciton
                     obj.mappingFuncs9((idH-1)*10 + i,:),1);
@@ -106,27 +109,31 @@ classdef synthWBmodel
                 synthWBimages(:,:,:,count) = obj.change_wb(I,mf); % apply mf
                 count = count + 1;
             end
-           
+            
         end
         
-        function out = change_wb(obj,input, m) % apply m to input image
-            sz=size(input); 
+        function out = change_wb(obj,input, m)
+		% Applies a given mapping function m to input image input.
+            sz=size(input);
             input=reshape(input,[],3); % reshape image to be n*3 (n total number of pixels)
             %higher degree (N-D)
-            input=obj.kernelP9(input); % raise it to a higher-dim space    
+            input=obj.kernelP9(input); % raise it to a higher-dim space   
             out=input*m; % apply m
             out = obj.out_of_gamut_clipping(out); % clip out-of-gamut pixels
             out=reshape(out,[sz(1),sz(2),sz(3)]); % reshape the image back to its original shape
         end
-  
-        function O=kernelP9(obj,I) %kernel(r,g,b)=[r,g,b,r2,g2,b2,rg,rb,gb];
+        
+        function O=kernelP9(obj,I)
+		% Kernel function: \phi(r,g,b) -> (r,g,b,r2,g2,b2,rg,rb,gb)
             O=[I,... %r,g,b
                 I.*I,... %r2,g2,b2
                 I(:,1).*I(:,2),I(:,1).*I(:,3),I(:,2).*I(:,3),... %rg,rb,gb
                 ];
         end
         
-        function [I] = out_of_gamut_clipping(obj,I) % clipping out-of-gamut pixels
+        
+        function I = out_of_gamut_clipping(obj,I)
+		% Clips out-of-gamut pixels.
             I(I>1)=1;
             I(I<0)=0;
         end

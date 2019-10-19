@@ -32,7 +32,8 @@ class WBEmulator:
                                     '_T_AS', '_T_CS', '_C_AS', '_C_CS',
                                     '_D_AS', '_D_CS'] # WB & photo finishing styles
 
-    def encode(self, hist): #encode given histogram
+    def encode(self, hist):
+        """Generates a compacted feature of a given RGB-uv histogram tensor."""
         histR_reshaped = np.reshape(np.transpose(hist[:, :, 0]),
                        (1, int(hist.size / 3)), order="F")  # reshaped red layer of histogram
         histG_reshaped = np.reshape(np.transpose(hist[:, :, 1]),
@@ -44,7 +45,8 @@ class WBEmulator:
         feature = np.dot(hist_reshaped - self.encoderBias.transpose(), self.encoderWeights)  # compute compacted histogram feature
         return feature
 
-    def rgbUVhist(self, I): #compute the RGB-uv histogram tensor
+    def rgbUVhist(self, I):
+        """Computes an RGB-uv histogram tensor."""
         sz = np.shape(I)  # get size of current image
         if sz[0] * sz[1] > 202500:  # if it is larger than 450*450
             factor = np.sqrt(202500 / (sz[0] * sz[1]))  # rescale factor
@@ -84,7 +86,8 @@ class WBEmulator:
         return hist
 
 
-    def generateWbsRGB(self, I, outNum = 10): #emulate WB | outNum number of images to generate is otpional
+    def generateWbsRGB(self, I, outNum = 10):
+        """Generates outNum new images of a given image I -- outNum should be <=10."""
         I = cv2.cvtColor(I, cv2.COLOR_BGR2RGB)  # convert from BGR to RGB
         I = im2double(I)  # convert to double
         feature = self.encode(self.rgbUVhist(I))
@@ -124,6 +127,7 @@ class WBEmulator:
         return synthWBimages, wb_pf
 
     def single_image_processing(self, in_img, out_dir="../results", outNum=10, write_original=1):
+        """Applies the WB emulator to a single image in_img."""
         print("processing image: " + in_img + "\n")
         filename, file_extension = os.path.splitext(in_img)  # get file parts
         I = cv2.imread(in_img)  # read the image
@@ -137,6 +141,7 @@ class WBEmulator:
                             '_original' + file_extension, I)  # save original image
 							
     def batch_processing(self, in_dir, out_dir="../results", outNum=10, write_original=1):
+        """Applies the WB emulator to all images in a given directory in_dir."""
         imgfiles = []
         valid_images = (".jpg", ".bmp", ".png", ".tga")
         for f in os.listdir(in_dir):
@@ -157,7 +162,7 @@ class WBEmulator:
         
     def trainingGT_processing(self, in_dir, out_dir, gt_dir, out_gt_dir, gt_ext,
                               outNum=10, write_original=1):
-
+        """Applies the WB emulator to all training images in in_dir and generates corresponding GT files"""
         imgfiles = [] # image files will be saved here
         gtfiles = []  # ground truth files will be saved here
         valid_images = (".jpg", ".bmp", ".png", ".tga") # valid image file extensions (modify it if needed)
@@ -192,7 +197,8 @@ class WBEmulator:
         
 
 
-def changeWB(input, m):  # apply the given mapping function m to input image
+def changeWB(input, m):
+    """Applies a mapping function m to a given input image."""
     sz = np.shape(input) # get size of input image
     I_reshaped = np.reshape(input,(int(input.size/3),3),
                             order="F") # reshape input to be n*3 (n: total number of pixels)
@@ -204,17 +210,19 @@ def changeWB(input, m):  # apply the given mapping function m to input image
     return out
 
 
-def kernelP9(I):  # 9-poly kernel
-    # kernel(r, g, b) = [r, g, b, r2, g2, b2, rg, rb, gb];
+def kernelP9(I):
+    """Kernel function: kernel(r, g, b) -> (r, g, b, r2, g2, b2, rg, rb, gb)"""
     return (np.transpose((I[:,0], I[:,1], I[:,2], I[:,0] * I[:,0],
                            I[:,1] * I[:,1], I[:,2] * I[:,2], I[:, 0] * I[:, 1],
                            I[:, 0] * I[:, 2], I[:, 1] * I[:, 2])))
 
 
-def outOfGamutClipping(I):  # out-of-gamut clipping
+def outOfGamutClipping(I):
+    """Clips out-of-gamut pixels."""
     I[I > 1] = 1 # any pixel is higher than 1, clip it to 1
     I[I < 0] = 0 # any pixel is below 0, clip it to 0
     return I
 
-def im2double(im): #from uint8 (0->255) to double (0->1)
+def im2double(im):
+    """Returns a double image [0,1] of the uint8 im [0,255]."""
     return cv2.normalize(im.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
