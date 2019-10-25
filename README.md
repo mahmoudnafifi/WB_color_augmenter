@@ -5,7 +5,7 @@
 *[Mahmoud Afifi](https://sites.google.com/view/mafifi)*<sup>1</sup> and *[Michael S. Brown](http://www.cse.yorku.ca/~mbrown/)*<sup>1,2</sup>
 <br></br><sup>1</sup>York University  <sup>2</sup>Samsung Research
 
-#### [Project page](http://cvil.eecs.yorku.ca/projects/public_html/wb_emulation/index.html) - (Paper)[http://openaccess.thecvf.com/content_ICCV_2019/papers/Afifi_What_Else_Can_Fool_Deep_Learning_Addressing_Color_Constancy_Errors_ICCV_2019_paper.pdf] - (Supplementary Materials) [http://openaccess.thecvf.com/content_ICCV_2019/supplemental/Afifi_What_Else_Can_ICCV_2019_supplemental.pdf].
+#### [Project page](http://cvil.eecs.yorku.ca/projects/public_html/wb_emulation/index.html) - [Paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Afifi_What_Else_Can_Fool_Deep_Learning_Addressing_Color_Constancy_Errors_ICCV_2019_paper.pdf) - [Supplementary Materials](http://openaccess.thecvf.com/content_ICCV_2019/supplemental/Afifi_What_Else_Can_ICCV_2019_supplemental.pdf)
 
 <br>
 <img src="https://drive.google.com/uc?export=view&id=1hFq00SmUo4-xUZFJQAqMRQNkwO6NIu6w" style="width: 350px; max-width: 100%; height: auto" title="Click for the larger version." />
