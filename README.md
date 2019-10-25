@@ -61,10 +61,25 @@ Our augmentation method can accurately emulate realistic color constancy degrada
    new_img = out(:,:,:,i); %access the ith generated image
    ```
    
+#### Dataset
+Coming soon!
+   
 #### MIT License
 
 ### Publication
+
+If you use this code or our dataset, please cite our paper:
+
 Mahmoud Afifi and Michael S. Brown. What Else Can Fool Deep Learning? Addressing Color Constancy Errors on Deep Neural Network Performance. International Conference on Computer Vision (ICCV), 2019.
 
 
+```
+@inproceedings{afifi2019addressingCCErrors,
+  title={What Else Can Fool Deep Learning? Addressing Color Constancy Errors on Deep Neural Network Performance},
+  author={Afifi, Mahmoud and Brown, Michael S},
+  booktitle={Proceedings the IEEE International Conference on Computer Vision (ICCV)},
+  pages={},
+  year={2019}
+}
+```
 
