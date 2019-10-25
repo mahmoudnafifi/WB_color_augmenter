@@ -74,12 +74,12 @@ Mahmoud Afifi and Michael S. Brown. What Else Can Fool Deep Learning? Addressing
 
 
 ```
-@inproceedings{afifi2019addressingCCErrors,
-  title={What Else Can Fool Deep Learning? Addressing Color Constancy Errors on Deep Neural Network Performance},
-  author={Afifi, Mahmoud and Brown, Michael S},
-  booktitle={Proceedings of the IEEE International Conference on Computer Vision (ICCV)},
-  pages={},
-  year={2019}
+@InProceedings{Afifi_2019_ICCV,
+author = {Afifi, Mahmoud and Brown, Michael S.},
+title = {What Else Can Fool Deep Learning? Addressing Color Constancy Errors on Deep Neural Network Performance},
+booktitle = {The IEEE International Conference on Computer Vision (ICCV)},
+month = {October},
+year = {2019}
 }
 ```
 
