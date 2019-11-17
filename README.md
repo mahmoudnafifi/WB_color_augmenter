@@ -1,4 +1,4 @@
-# White Balance Color Augmenter
+# White-Balance Emulator for Color Augmentation
 
 ## What Else Can Fool Deep Learning? Addressing Color Constancy Errors on Deep Neural Network Performance
 
