@@ -8,11 +8,11 @@
 #### [Project page](http://cvil.eecs.yorku.ca/projects/public_html/wb_emulation/index.html) - [Paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Afifi_What_Else_Can_Fool_Deep_Learning_Addressing_Color_Constancy_Errors_ICCV_2019_paper.pdf) - [Supplementary Materials](http://openaccess.thecvf.com/content_ICCV_2019/supplemental/Afifi_What_Else_Can_ICCV_2019_supplemental.pdf)
 
 <br>
-<img src="https://drive.google.com/uc?export=view&id=1hFq00SmUo4-xUZFJQAqMRQNkwO6NIu6w" style="width: 350px; max-width: 100%; height: auto" title="Click for the larger version." />
+<img src="https://drive.google.com/uc?export=view&id=1hFq00SmUo4-xUZFJQAqMRQNkwO6NIu6w" style="width: 350px; max-width: 100%; height: auto" title="Our method produces realistic color augmentation compared with other methods." />
 
 Our augmentation method can accurately emulate realistic color constancy degradation. Existing color augmentation methods often generate unrealistic colors which rarely happen in reality (e.g., green skin or purple grass). More importantly, the visual appearance of existing color augmentation techniques does not well represent the color casts produced by incorrect WB applied onboard cameras, as shown below.
 
-<img src="https://drive.google.com/uc?export=view&id=1xDF4mjD9AyIEAgbVT38ygRvw0K_o3MN-" style="width: 350px; max-width: 100%; height: auto" title="Click for the larger version." />
+<img src="https://drive.google.com/uc?export=view&id=1xDF4mjD9AyIEAgbVT38ygRvw0K_o3MN-" style="width: 350px; max-width: 100%; height: auto" title="Examples of our results." />
 
 
 ### Quick start
@@ -62,7 +62,13 @@ Our augmentation method can accurately emulate realistic color constancy degrada
    ```
    
 #### Dataset
-Coming soon!
+We used images from [Set1 of the Rendered WB dataset](http://cvil.eecs.yorku.ca/projects/public_html/sRGB_WB_correction/dataset.html) to build our method. 
+
+<br>
+<img src="https://drive.google.com/uc?export=view&id=1yu8VyLUSohvPiKPRUwL_f_4R51SUBYdM" style="width: 350px; max-width: 100%; height: auto" title="Example images from our rendered testing set." />
+
+In our [paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Afifi_What_Else_Can_Fool_Deep_Learning_Addressing_Color_Constancy_Errors_ICCV_2019_paper.pdf), we introduced a new testing set that contains [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) classes to evaluate trained models with different settings. This testing set contains 15,098 rendered images that reflect real in-camera WB settings. Our testing set is divided into ten directories, each includes testing images for one of [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) classes. You can download our testing set from the following links: 
+[32x32 pixels](https://ln2.sync.com/dl/557e4b360/u9wki7e5-twjzqvx6-639n7p5c-cvv9bcz9) | [224x224 pixels](https://ln2.sync.com/dl/f969a6500/c3evbxeh-xhx6vxim-sjrzyns7-h4zz8zs6) | [227x227 pixels](https://ln2.sync.com/dl/e09cd2c20/7h67ibk7-8j4g6yz6-sjwhqmvv-bx8k367e)
 
 
    

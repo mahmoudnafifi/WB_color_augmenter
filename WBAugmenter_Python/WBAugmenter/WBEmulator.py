@@ -92,8 +92,6 @@ class WBEmulator:
         I = im2double(I)  # convert to double
         feature = self.encode(self.rgbUVhist(I))
         if outNum < len(self.wb_photo_finishing):  # if selected outNum is less than number of available WB & photo finishing (PF) styles,
-            #inds = np.random.permutation(len(self.wb_photo_finishing))  # randomize and select outNum WB & PF styles
-            #wb_pf = self.wb_photo_finishing[inds[0:outNum - 1]]  # wb_pf now represents the selected WB & PF styles
             wb_pf = rnd.sample(self.wb_photo_finishing, outNum)
             inds = []
             for j in range(outNum):
@@ -120,7 +118,7 @@ class WBEmulator:
         weightsH = weightsH / sum(weightsH)  # normalize blending weights
         for i in range(len(inds)):  # for each of the retried training examples, do
             ind = inds[i]  # for each WB & PF style,
-            mf = sum(np.reshape(np.matlib.repmat(weightsH, 1, 27), (25, 1, 9, 3)) *
+            mf = sum(np.reshape(np.matlib.repmat(weightsH, 1, 27), (self.K, 1, 9, 3)) *
                      self.mappingFuncs[(idH - 1) * 10 + ind, :])  # compute the mapping function
             mf = mf.reshape(9, 3, order="F")  # reshape it to be 9 * 3
             synthWBimages[:, :, :, i] = changeWB(I, mf) # apply it!
