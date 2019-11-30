@@ -34,6 +34,7 @@ Our augmentation method can accurately emulate realistic color constancy degrada
 
 
 #### 2. Matlab:
+[![View WB color augmenter on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/72966-wb-color-augmenter)
  1. Run `install_.m`
  2. Try our demos: 
     * `demo_single_image` to process signle image
