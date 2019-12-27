@@ -14,7 +14,7 @@
 %%
 
 %% 
-% This demo show how to use our data augmenter to generate extra X images
+% This demo shows how to use our data augmenter to generate extra X images
 % with different WB and camera styles for data augmentation. You can
 % generate up to ten images for each of training images (i.e., X<=10)
 % The code will automatically generate copies of the corresponding ground
