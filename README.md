@@ -96,4 +96,5 @@ year = {2019}
 ### Related Research Projects
 - [When Color Constancy Goes Wrong](https://github.com/mahmoudnafifi/WB_sRGB): White balance camera-rendered sRGB images (CVPR 2019).
 - [Color Temperature Tuning](https://github.com/mahmoudnafifi/ColorTempTuning): A camera pipeline that allows accurate post-capture white balance editing (CIC best paper award, 2019).
+- [Deep White-Balance Editing](https://arxiv.org/pdf/2004.01354.pdf)
 
