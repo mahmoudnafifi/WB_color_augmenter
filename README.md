@@ -61,7 +61,14 @@ Our augmentation method can accurately emulate realistic color constancy degrada
    ```
    new_img = out(:,:,:,i); %access the ith generated image
    ```
-   
+
+
+#### 3. PyTorch/TensorFlow:
+Soon
+
+
+
+
 #### Dataset
 We used images from [Set1 of the Rendered WB dataset](http://cvil.eecs.yorku.ca/projects/public_html/sRGB_WB_correction/dataset.html) to build our method. 
 
