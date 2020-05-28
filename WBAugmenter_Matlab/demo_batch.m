@@ -41,6 +41,10 @@ output_dir = fullfile('..','results'); % output directory (will contain
 NumOfImgs = 10; % should be less than or equal 10
 saveOrig = true; % to save a copy of original images in output_dir
 
+if exist(output_dir, 'dir') == 0
+	mkdir(output_dir)
+end
+
 if NumOfImgs > 10
     error('Cannot generate more than 10 images for each input image');
 end
