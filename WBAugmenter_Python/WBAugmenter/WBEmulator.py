@@ -61,17 +61,11 @@ class WBEmulator:
       newH = int(np.floor(sz[0] * factor))
       newW = int(np.floor(sz[1] * factor))
       I = cv2.resize(I, (newW, newH), interpolation=cv2.INTER_NEAREST)
-    II = I.reshape(int(I.size / 3), 3)  # n*3
-    inds = np.where((II[:, 0] > 0) & (II[:, 1] > 0) & (II[:, 2] > 0))
-    R = II[inds, 0]  # red channel
-    G = II[inds, 1]  # green channel
-    B = II[inds, 2]  # blue channel
-    I_reshaped = np.concatenate((R, G, B), axis=0).transpose()
+    I_reshaped = I[(I > 0).all(axis=2)]
     eps = 6.4 / self.h
     A = np.arange(-3.2, 3.19, eps)  # dummy vector
     hist = np.zeros((A.size, A.size, 3))  # histogram will be stored here
-    Iy = np.sqrt(np.power(I_reshaped[:, 0], 2) + np.power(
-      I_reshaped[:, 1], 2) + np.power(I_reshaped[:, 2], 2))
+    Iy = np.linalg.norm(I_reshaped, axis=1)  # intensity vector
     for i in range(3):  # for each histogram layer, do
       r = []  # excluded channels will be stored here
       for j in range(3):  # for each color channel do
@@ -79,17 +73,10 @@ class WBEmulator:
           r.append(j)  # exclude it
       Iu = np.log(I_reshaped[:, i] / I_reshaped[:, r[1]])
       Iv = np.log(I_reshaped[:, i] / I_reshaped[:, r[0]])
-      diff_u = np.abs(np.matlib.repmat(Iu, np.size(A), 1).transpose() -
-                      np.matlib.repmat(A, np.size(Iu), 1))
-      diff_v = np.abs(np.matlib.repmat(Iv, np.size(A), 1).transpose() -
-                      np.matlib.repmat(A, np.size(Iv), 1))
-      diff_u[diff_u >= (eps / 2)] = 0
-      diff_u[diff_u != 0] = 1
-      diff_v[diff_v >= (eps / 2)] = 0
-      diff_v[diff_v != 0] = 1
-      temp = (np.matlib.repmat(Iy, np.size(A), 1) * diff_u.transpose())
-      hist[:, :, i] = np.dot(temp, diff_v)
-      norm_ = np.sum(hist[:, :, i], axis=None)
+      hist[:, :, i], _, _ = np.histogram2d(
+        Iu, Iv, bins=self.h, range=((-3.2 - eps / 2, 3.2 - eps / 2),) * 2,
+        weights=Iy)
+      norm_ = hist[:, :, i].sum()
       hist[:, :, i] = np.sqrt(hist[:, :, i] / norm_)  # (hist/norm)^(1/2)
     return hist
 
