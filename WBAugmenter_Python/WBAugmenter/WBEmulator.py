@@ -106,9 +106,6 @@ class WBEmulator:
     idH = D_sq.argpartition(self.K, axis=0)[:self.K]
     dH = np.sqrt(
       np.take_along_axis(D_sq, idH, axis=0))
-    sorted_idx = dH.argsort(axis=0)  # get sorting indices
-    idH = np.take_along_axis(idH, sorted_idx, axis=0)  # sort distance inds
-    dH = np.take_along_axis(dH, sorted_idx, axis=0)  # sort distances
     weightsH = np.exp(-(np.power(dH, 2)) /
                       (2 * np.power(self.sigma, 2)))  # compute weights
     weightsH = weightsH / sum(weightsH)  # normalize blending weights
