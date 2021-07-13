@@ -33,7 +33,7 @@ Our augmentation method can accurately emulate realistic color constancy degrada
 3. `demo.py` shows an example of how to use the `WBEmulator` module
 
 #### 2. PyTorch:
-`torch_demo.py` shows an example of how to use the `WBEmulator` module to augment images on the fly. This example can be easily adapted for TensorFlow as well. This code applies the WB augmentation to each image loaded from the data loader. See the implementation of `BasicDataset` in `torch_demo.py` as an example of the PyTorch data loader with our WB augmenter. The parameter `aug_prob` controls the probability of applying the WB augmenter. 
+`torch_demo.py` shows an example of how to use the `WBEmulator` module to augment images on the fly. This example can be easily adapted for TensorFlow as well. This code applies the WB augmentation to each image loaded from the data loader. See the implementation of `BasicDataset` in `torch_demo.py` as an example of PyTorch data loader with our WB augmenter. The parameter `aug_prob` controls the probability of applying the WB augmenter. 
 
 The demo in `torch_demo.py` uses the ImageNET pre-trained model of VGG19. The demo uses a single image of a hamster (located in `\images` and shown below) and randomly applies one of our WB/camera profiles to the image before classifying. 
 
