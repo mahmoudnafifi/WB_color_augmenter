@@ -15,10 +15,14 @@
 
 import numpy as np
 import numpy.matlib
-import cv2
+from PIL import Image
 import random as rnd
 import os
+from os.path import splitext, split, basename, join, exists
 import shutil
+from datetime import datetime
+import pickle
+from WBAugmenter import imresize as resize
 
 
 class WBEmulator:
@@ -60,7 +64,7 @@ class WBEmulator:
       factor = np.sqrt(202500 / (sz[0] * sz[1]))  # rescale factor
       newH = int(np.floor(sz[0] * factor))
       newW = int(np.floor(sz[1] * factor))
-      I = cv2.resize(I, (newW, newH), interpolation=cv2.INTER_NEAREST)
+      I = resize.imresize(I, output_shape=(newW, newH))
     I_reshaped = I[(I > 0).all(axis=2)]
     eps = 6.4 / self.h
     A = np.arange(-3.2, 3.19, eps)  # dummy vector
@@ -83,8 +87,7 @@ class WBEmulator:
   def generateWbsRGB(self, I, outNum=10):
     """Generates outNum new images of a given image I."""
     assert (outNum <= 10)
-    I = cv2.cvtColor(I, cv2.COLOR_BGR2RGB)  # convert from BGR to RGB
-    I = im2double(I)  # convert to double
+    I = to_numpy(I)  # convert to double
     feature = self.encode(self.rgbuv_hist(I))
     if outNum < len(self.wb_photo_finishing):
       wb_pf = rnd.sample(self.wb_photo_finishing, outNum)
@@ -95,8 +98,7 @@ class WBEmulator:
     else:
       wb_pf = self.wb_photo_finishing
       inds = list(range(0, len(wb_pf)))
-    synthWBimages = np.zeros((I.shape[0], I.shape[1],
-                              I.shape[2], len(wb_pf)))
+    synthWBimages = []
 
     D_sq = np.einsum('ij, ij ->i', self.features,
                      self.features)[:, None] + np.einsum(
@@ -116,8 +118,90 @@ class WBEmulator:
                           (self.K, 1, 9, 3)) *
                self.mappingFuncs[(idH - 1) * 10 + ind, :])
       mf = mf.reshape(9, 3, order="F")  # reshape it to be 9 * 3
-      synthWBimages[:, :, :, i] = changeWB(I, mf)  # apply it!
+      synthWBimages.append(changeWB(I, mf))  # apply it!
     return synthWBimages, wb_pf
+
+
+  def computeMappingFunc(self, I, outNum=10):
+    """Generates outNum mapping functions of a given image I."""
+    assert (outNum <= 10)
+    I = to_numpy(I)  # convert to double
+    feature = self.encode(self.rgbuv_hist(I))
+    if outNum < len(self.wb_photo_finishing):
+      wb_pf = rnd.sample(self.wb_photo_finishing, outNum)
+      inds = []
+      for j in range(outNum):
+        inds.append(self.wb_photo_finishing.index(wb_pf[j]))
+
+    else:
+      wb_pf = self.wb_photo_finishing
+      inds = list(range(0, len(wb_pf)))
+    mfs = []
+
+    D_sq = np.einsum('ij, ij ->i', self.features,
+                     self.features)[:, None] + np.einsum(
+      'ij, ij ->i', feature, feature) - 2 * self.features.dot(feature.T)
+
+    # get smallest K distances
+    idH = D_sq.argpartition(self.K, axis=0)[:self.K]
+    dH = np.sqrt(
+      np.take_along_axis(D_sq, idH, axis=0))
+    weightsH = np.exp(-(np.power(dH, 2)) /
+                      (2 * np.power(self.sigma, 2)))  # compute weights
+    weightsH = weightsH / sum(weightsH)  # normalize blending weights
+    for i in range(len(inds)):  # for each of the retried training examples,
+      ind = inds[i]  # for each WB & PF style,
+      # generate a mapping function
+      mf = sum(np.reshape(np.matlib.repmat(weightsH, 1, 27),
+                          (self.K, 1, 9, 3)) *
+               self.mappingFuncs[(idH - 1) * 10 + ind, :])
+      mfs.append(mf.reshape(9, 3, order="F")) # reshape it to be 9 * 3
+    return mfs
+
+
+  def precompute_mfs(self, filenames, outNum=10, target_dir=None):
+    """Store mapping functions for a set of files."""
+    assert (outNum <= 10)
+    if target_dir is None:
+      now = datetime.now()
+      target_dir = now.strftime('%m-%d-%Y_%H-%M-%S')
+    for file in filenames:
+      I = to_numpy(Image.open(file))
+      mfs = self.computeMappingFunc(I, outNum=outNum)
+      out_filename = basename(splitext(file)[0])
+      main_dir = split(file)[0]
+      if exists(join(main_dir, target_dir)) == 0:
+        os.mkdir(join(main_dir, target_dir))
+      with open(join(main_dir, target_dir, out_filename + '_mfs.pickle'),
+                'wb') as handle:
+        pickle.dump(mfs, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    return target_dir
+
+
+  def delete_precomputed_mfs(self, filenames, target_dir):
+    """Delete stored mapping functions for a set of files."""
+    for file in filenames:
+      out_filename = basename(splitext(file)[0])
+      main_dir = split(file)[0]
+      os.remove(join(main_dir, target_dir, out_filename + '_mfs.pickle'))
+
+
+  def open_with_wb_aug(self, filename, target_dir, target_size=None):
+    I = Image.open(filename)
+    if target_size is not None:
+      I = I.resize((target_size, target_size))
+    I = to_numpy(I)
+    out_filename = basename(splitext(filename)[0])
+    main_dir = split(filename)[0]
+    with open(join(main_dir, target_dir, out_filename + '_mfs.pickle'),
+              'rb') as handle:
+      mfs = pickle.load(handle)
+      ind = np.random.randint(len(mfs))
+      mf = mfs[ind]
+      I = changeWB(I, mf)
+      return I
+
 
   def single_image_processing(self, in_img, out_dir="../results", outNum=10,
                               write_original=1):
@@ -125,16 +209,16 @@ class WBEmulator:
     assert (outNum <= 10)
     print("processing image: " + in_img + "\n")
     filename, file_extension = os.path.splitext(in_img)  # get file parts
-    I = cv2.imread(in_img)  # read the image
+    I = Image.open(in_img)  # read the image
     # generate new images with different WB settings
     outImgs, wb_pf = self.generateWbsRGB(I, outNum)
     for i in range(outNum):  # save images
-      outImg = outImgs[:, :, :, i]  # get the ith output image
-      cv2.imwrite(out_dir + '/' + os.path.basename(filename) +
-                  wb_pf[i] + file_extension, outImg * 255)  # save it
+      outImg = outImgs[i]  # get the ith output image
+      outImg.save(out_dir + '/' + os.path.basename(filename) +
+                  wb_pf[i] + file_extension)  # save it
       if write_original == 1:
-        cv2.imwrite(out_dir + '/' + os.path.basename(filename) +
-                    '_original' + file_extension, I)
+        I.save(out_dir + '/' + os.path.basename(filename) +
+               '_original' + file_extension)
 
   def batch_processing(self, in_dir, out_dir="../results", outNum=10,
                        write_original=1):
@@ -148,15 +232,15 @@ class WBEmulator:
     for in_img in imgfiles:
       print("processing image: " + in_img + "\n")
       filename, file_extension = os.path.splitext(in_img)
-      I = cv2.imread(in_img)
+      I = Image.open(in_img)
       outImgs, wb_pf = self.generateWbsRGB(I, outNum)
       for i in range(outNum):  # save images
-        outImg = outImgs[:, :, :, i]  # get the ith output image
-        cv2.imwrite(out_dir + '/' + os.path.basename(filename) +
-                    wb_pf[i] + file_extension, outImg * 255)  # save it
+        outImg = outImgs[i]  # get the ith output image
+        outImg.save(out_dir + '/' + os.path.basename(filename) +
+                    wb_pf[i] + file_extension)  # save it
         if write_original == 1:
-          cv2.imwrite(out_dir + '/' + os.path.basename(filename) +
-                      '_original' + file_extension, I)
+          I.save(out_dir + '/' + os.path.basename(filename) + '_original' +
+                 file_extension)
 
   def trainingGT_processing(self, in_dir, out_dir, gt_dir, out_gt_dir, gt_ext,
                             outNum=10, write_original=1):
@@ -181,20 +265,20 @@ class WBEmulator:
       filename, file_extension = os.path.splitext(in_img)
       gtbasename, gt_extension = os.path.splitext(gtfile)
       gtbasename = os.path.basename(gtbasename)
-      I = cv2.imread(in_img)
+      I = Image.open(in_img)
       # generate new images with different WB settings
       outImgs, wb_pf = self.generateWbsRGB(I, outNum)
       for i in range(outNum):
-        outImg = outImgs[:, :, :, i]
-        cv2.imwrite(out_dir + '/' + os.path.basename(filename) +
-                    wb_pf[i] + file_extension, outImg * 255)  # save it
+        outImg = outImgs[i]
+        outImg.save(out_dir + '/' + os.path.basename(filename) + wb_pf[i] +
+                    file_extension)  # save it
         shutil.copyfile(gtfile,  # copy corresponding gt file
                         os.path.join(out_gt_dir, gtbasename + wb_pf[i] +
                                      gt_extension))
 
         if write_original == 1:  # if write_original flag is true
-          cv2.imwrite(out_dir + '/' + os.path.basename(filename) +
-                      '_original' + file_extension, I)
+          I.save(out_dir + '/' + os.path.basename(filename) + '_original' +
+                 file_extension)
           # copy corresponding gt file
           shutil.copyfile(gtfile, os.path.join(
             out_gt_dir, gtbasename + '_original' + gt_extension))
@@ -211,7 +295,7 @@ def changeWB(input, m):
   out = outOfGamutClipping(out)  # clip out-of-gamut pixels
   # reshape output image back to the original image shape
   out = out.reshape(sz[0], sz[1], sz[2], order="F")
-  out = cv2.cvtColor(out.astype('float32'), cv2.COLOR_RGB2BGR)
+  out = to_image(out)
   return out
 
 
@@ -229,6 +313,11 @@ def outOfGamutClipping(I):
   return I
 
 
-def im2double(im):
-  """Returns a double image [0,1] of the uint8 im [0,255]."""
-  return cv2.normalize(im.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
+def to_numpy(im):
+  """Returns a double numpy image [0,1] of the uint8 im [0,255]."""
+  return np.array(im) / 255
+
+
+def to_image(im):
+  """Returns a PIL image from a given numpy [0-1] image."""
+  return Image.fromarray(np.uint8(im * 255))
