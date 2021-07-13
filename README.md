@@ -32,6 +32,28 @@ Our augmentation method can accurately emulate realistic color constancy degrada
     * `python wbAug.py --input_image_dir ../example/training_set --ground_truth_dir ../example/ground_truth --ground_truth_ext .png --out_dir ../new_training_set --out_ground_truth ../new_ground_truth --out_number 3 --write_original 1`
 3. `demo.py` shows an example of how to use the `WBEmulator` module
 
+#### 3. PyTorch:
+`torch_demo.py` shows an example of how to use the `WBEmulator` module to augment images on the fly. This example can be easily adapted for TensorFlow as well. This code applies the WB augmentation to each image loaded from the data loader. See the implementation of `BasicDataset` in `torch_demo.py` as an example of the PyTorch data loader with our WB augmenter. The parameter `aug_prob` controls the probability of applying the WB augmenter. 
+
+The demo in `torch_demo.py` uses the ImageNET pre-trained model of VGG19. The demo uses a single image of a hamster (located in `\images` and shown below) and randomly applies one of our WB/camera profiles to the image before classifying. 
+
+![example](https://user-images.githubusercontent.com/37669469/125386881-09c76380-e36b-11eb-9e76-e8d0a9041305.jpg)
+
+As shown below, the network has a different prediction each time because of the WB effect. The same `BasicDataset` class in `torch_demo.py` could be adjusted to use in training phase. 
+
+```
+Output:
+toy poodle 0.15292471647262573
+hen 0.5484228134155273
+toy poodle 0.15292471647262573
+hen 0.5260483026504517
+hen 0.5484228134155273
+hen 0.5260483026504517
+hamster 0.2579324543476105
+hen 0.5260483026504517
+hamster 0.2579324543476105
+toy poodle 0.15292471647262573
+```
 
 #### 2. Matlab:
 [![View WB color augmenter on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/72966-wb-color-augmenter)
