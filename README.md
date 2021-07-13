@@ -18,9 +18,9 @@ Our augmentation method can accurately emulate realistic color constancy degrada
 ### Quick start
 
 #### 1. Python:
-1. Requirements: numpy & opencv-python
+1. Requirements: numpy & Pillow 
   * `pip install numpy`
-  * `pip install opencv-python`
+  * `pip install Pillow`
 2. Run `wbAug.py`; examples:
   * Process a singe image (generate ten new images and a copy of the given image): 
     * `python wbAug.py --input_image_filename ../images/image1.jpg`
