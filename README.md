@@ -55,6 +55,9 @@ hamster 0.2579324543476105
 toy poodle 0.15292471647262573
 ```
 
+To clone only the Python part, please check this [repo](https://github.com/mahmoudnafifi/WB_color_augmenter_python).
+
+
 #### 3. Matlab:
 [![View WB color augmenter on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/72966-wb-color-augmenter)
  1. Run `install_.m`
