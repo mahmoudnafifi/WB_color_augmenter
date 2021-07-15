@@ -55,7 +55,7 @@ hamster 0.2579324543476105
 toy poodle 0.15292471647262573
 ```
 
-To clone only the Python part, please check this [repo](https://github.com/mahmoudnafifi/WB_color_augmenter_python).
+In this example, we showed how to use the WB augmenter in a custom database class. To see how to use the WB augmenter for PyTorch built-in datasets, please see this [Colab example](https://colab.research.google.com/drive/1wbUW87MoXabdzDh53YWoOXrvOdjpubQ4?usp=sharing). In this example, we use this [repo](https://github.com/mahmoudnafifi/WB_color_augmenter_python), which provides a combined version of the Python implementation of the WB augmenter to facilitate cloning to Colab. We used [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) to train a simple network with and without the WB augmenter. As shown in the [Colab example](https://colab.research.google.com/drive/1wbUW87MoXabdzDh53YWoOXrvOdjpubQ4?usp=sharing), training with the WB augmenter results in +3% improvement compared to training on original data.
 
 
 #### 3. Matlab:
