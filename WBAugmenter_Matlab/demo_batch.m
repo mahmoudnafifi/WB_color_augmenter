@@ -65,7 +65,7 @@ for i = 1 : length (images) % for each input image, do
     [~,name,ext] = fileparts(imgin);
     if saveOrig == true
         imwrite(I_in,fullfile(output_dir,... % save a copy of it in output dir
-            sprintf('%s%s.%s',name,'_original',ext)));
+            sprintf('%s%s%s',name,'_original',ext)));
     end
     try
         % generate images with synthetic WB effects
