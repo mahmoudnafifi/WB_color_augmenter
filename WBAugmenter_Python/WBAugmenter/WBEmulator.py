@@ -15,7 +15,7 @@
 
 import numpy as np
 import numpy.matlib
-from PIL import Image
+from PIL import Image, ImageOps
 import random as rnd
 import os
 from os.path import splitext, split, basename, join, exists
@@ -210,6 +210,8 @@ class WBEmulator:
     print("processing image: " + in_img + "\n")
     filename, file_extension = os.path.splitext(in_img)  # get file parts
     I = Image.open(in_img)  # read the image
+    I = ImageOps.exif_transpose(I)
+
     # generate new images with different WB settings
     outImgs, wb_pf = self.generateWbsRGB(I, outNum)
     for i in range(outNum):  # save images
@@ -233,6 +235,7 @@ class WBEmulator:
       print("processing image: " + in_img + "\n")
       filename, file_extension = os.path.splitext(in_img)
       I = Image.open(in_img)
+      I = ImageOps.exif_transpose(I)
       outImgs, wb_pf = self.generateWbsRGB(I, outNum)
       for i in range(outNum):  # save images
         outImg = outImgs[i]  # get the ith output image
@@ -266,6 +269,7 @@ class WBEmulator:
       gtbasename, gt_extension = os.path.splitext(gtfile)
       gtbasename = os.path.basename(gtbasename)
       I = Image.open(in_img)
+      I = ImageOps.exif_transpose(I)
       # generate new images with different WB settings
       outImgs, wb_pf = self.generateWbsRGB(I, outNum)
       for i in range(outNum):
